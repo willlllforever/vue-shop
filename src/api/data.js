@@ -8,5 +8,5 @@ export const getData = () => {
 }
 
 export const getUser = (params) => {
-    return axios.get('/user/getUser', params)
+    return axios.get('/user/getUser', { params })
 }

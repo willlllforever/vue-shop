@@ -2,7 +2,7 @@ import Vue from 'vue';
 import { Button, Row, Aside, Container, Header, Main, Menu, Submenu, MenuItemGroup, MenuItem,
     DropdownMenu, DropdownItem, Dropdown, Col, Card, Table, TableColumn, Breadcrumb, 
     BreadcrumbItem, Tag, Form, FormItem, Input, Select, Option, Switch, DatePicker,
-    Dialog, Pagination} from 'element-ui';
+    Dialog, Pagination, MessageBox, Message } from 'element-ui';
 Vue.use(Button);
 Vue.use(Row);
 Vue.use(Aside);
@@ -32,3 +32,5 @@ Vue.use(Switch);
 Vue.use(DatePicker);
 Vue.use(Dialog);
 Vue.use(Pagination);
+Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$message = Message

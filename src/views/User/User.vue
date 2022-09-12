@@ -23,7 +23,7 @@
         :inline="true"
         ref="form"
       ></common-form>
-      <el-button type="primary" @click="getList">搜索</el-button>
+      <el-button type="primary" @click="getList(searchForm.keyword)">搜索</el-button>
     </div>
     <common-table
       :tableData="tableDate"
@@ -121,12 +121,12 @@ export default {
           {
             prop: 'birth',
             label: '出生日期',
-            width: 200
+            width: 150
           },
           {
             prop: 'addr',
             label: '地址',
-            width: 320
+            width: 250
           }
         ],
         config: {
@@ -139,8 +139,11 @@ export default {
     methods: {
       confrim() {
         if(this.operateType === 'edit') {
+          // this.operateForm.sexLabel = this.operateForm.sex === 0 ? '女' : '男';
+          console.log(this.operateForm.sex);
           this.$axios.post('/user/edit', this.operateForm).then(res => {
             console.log(res);
+            console.log(this.operateForm.sex);
             this.isShow = false
           });
           this.getList();
@@ -168,15 +171,19 @@ export default {
         this.operateType = 'edit'
         this.isShow = true
         this.operateForm = row
+        // console.log(row.sexLabel);
+        // console.log(row.sex);
+        // console.log(row);
       },
-      delUser() {
+      delUser(row) {
         this.$confirm("此操作将永久删除该组件，是否继续？","提示",{
-          confirmButtonText: "确认",
-          confirmButtonText: "取消",
-          type: 'warning'
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         }).then(() => {
           const id = row.id
-          this.$axios.get("user/del",{
+          // console.log(id);
+          this.$axios.post("user/del",{},{
             params: {id}
           }).then(() => {
             this.$message({
@@ -185,7 +192,12 @@ export default {
             })
             this.getList()
           })
-        })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
       },
       getList(name ='') {
         this.config.loading = true;
@@ -197,7 +209,7 @@ export default {
           const {data} = res;
           console.log(data);
           this.tableDate = data.list.map(item => {
-            item.sexLabel = item.sex === 0 ? '女' : '男';
+            item.sexLabel = item.sex == 0 ? '女' : '男';
             return item
           })
           this.config.total = data.count
